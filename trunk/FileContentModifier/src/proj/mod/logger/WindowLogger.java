@@ -130,6 +130,10 @@ public class WindowLogger extends JFrame implements ILogger {
 	    s = doc.addStyle("plain", null);
 	    StyleConstants.setBold(s, false);
 	    break;
+	case 4:
+	    s = doc.addStyle("green", null);
+	    StyleConstants.setForeground(s, Color.GREEN);
+	    break;
 	default:
 	    break;
 	}
