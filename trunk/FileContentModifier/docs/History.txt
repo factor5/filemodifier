@@ -3,7 +3,8 @@ HISTORY of the FileContentModifier
 
   NEXT release	2009  
   -------------------------
-    - Searching the configuration file in the same directory. 
+  	+ Add backup option. 
+    + Searching the configuration file in the same directory. 
       No need to have same name as required.
     + Option not only to remove strings but to replace too.
     + Work log will be displayed in a window pop up real-time.
