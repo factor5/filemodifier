@@ -17,6 +17,10 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import proj.enums.Confiramtion;
+import proj.enums.MessageType;
+import proj.mod.backup.Copier;
+import proj.mod.backup.FileCopyNIO;
 import proj.mod.logger.ILogger;
 import proj.mod.logger.TextStyle;
 
@@ -54,6 +58,12 @@ public class FileModifier extends JFrame {
 	    .getProperty("line.separator");
 
     /**
+     * Path separator.
+     */
+    private static final String PATH_SEPARATOR = System
+	    .getProperty("file.separator");
+
+    /**
      * Path list.
      */
     List<String> pathList = null;
@@ -86,7 +96,7 @@ public class FileModifier extends JFrame {
 	if (fileExt.isEmpty() || strings == null || strings.length == 0
 		|| log == null) {
 	    displayMessage(INIT_PARAM_ERROR, TITLE_ERROR, MessageType.ERROR
-		    .get());
+		    .getValue());
 	    throw new IllegalArgumentException(INIT_PARAM_ERROR);
 	}
 	this.FILE_EXT_TYPE = fileExt;
@@ -113,28 +123,124 @@ public class FileModifier extends JFrame {
 
 	    File current = new File(curDirectory);
 
-	    log.appendLine("\nFound files:", TextStyle.BOLD.style());
+	    log.appendLine(SEPARATOR + "Found files:", TextStyle.BOLD.style());
 	    findFiles(current);
 
 	    if (pathList.size() == 0) {
 		displayMessage(NO_FILES_FOUND_INFO, TITLE_RESULT,
-			MessageType.INFO.get());
+			MessageType.INFO.getValue());
 		return;
 	    }
 
-	    log.appendLine("\nStart parsing files:", TextStyle.BOLD.style());
+	    int choise = JOptionPane.showConfirmDialog(null, "Make backup?",
+		    "Backup", JOptionPane.YES_NO_OPTION);
+	    try {
+		if (choise == Confiramtion.YES.getValue()) {
+		    backupFiles(curDirectory);
+		}
+	    } catch (IOException e) {
+		log.appendLine(e.getMessage(), TextStyle.RED.style());
+		choise = JOptionPane.showConfirmDialog(null, e.getMessage()
+			+ SEPARATOR + " Proceed without backup?", TITLE_ERROR,
+			JOptionPane.YES_NO_OPTION);
+		if (choise == Confiramtion.NO.getValue()) {
+		    throw new Exception(
+			    "Modification aborted due to unsuccesfull backup!");
+		} else {
+		    log.appendLine(SEPARATOR + "Backup was skipped!",
+			    TextStyle.RED.style());
+		}
+	    }
+
+	    log.appendLine(SEPARATOR + "Start parsing files:", TextStyle.BOLD
+		    .style());
+
 	    parseFiles();
 
-	    log.appendLine("\nJob done!", TextStyle.BOLD.style());
+	    log.appendLine(SEPARATOR + "Job done!", TextStyle.BOLD.style());
 	    // displayMessage(READY_MESSAGE, TITLE_RESULT, MESS_TYPE_INFO);
 	} catch (IOException e) {
 	    log.appendLine(e.getMessage(), TextStyle.RED.style());
-	    displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR.get());
+	    displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR
+		    .getValue());
 	    e.printStackTrace();
+	} catch (Exception e) {
+	    log.appendLine(e.getMessage(), TextStyle.RED.style());
+	    displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR
+		    .getValue());
 	} finally {
 	    this.setCursor(Cursor.getDefaultCursor());
 	}
+    }
 
+    /**
+     * Makes a backup of the found files. On every execution of the application
+     * if backup is applied a new directory with unique name will be created and
+     * the files will be copied in there.
+     * 
+     * @param path
+     *                the path where to store the backup
+     * @throws IOException
+     *                 if provided path is null or empty
+     */
+    private void backupFiles(final String path) throws IOException {
+	if (path == null || path.isEmpty()) {
+	    throw new IOException(
+		    "Backup failure because of missing or empty path!");
+	}
+
+	if (new File(path).canWrite()) {
+	    String backupDirPath = "backup_" + (System.currentTimeMillis());
+
+	    if (new File(backupDirPath).mkdir()) {
+		log.appendLine(SEPARATOR + "Start backup operation:",
+			TextStyle.BOLD.style());
+
+		Copier copier = new FileCopyNIO();
+		StringBuilder srcFileNewName = new StringBuilder();
+		for (String pathToSrcFile : pathList) {
+
+		    srcFileNewName.append(backupDirPath);
+		    srcFileNewName.append(pathToSrcFile.substring(pathToSrcFile
+			    .lastIndexOf(PATH_SEPARATOR)));
+
+		    copier.copy(new File(pathToSrcFile), new File(
+			    srcFileNewName.toString()));
+		    srcFileNewName.setLength(0);
+
+		    log.appendLine("Backup of :" + pathToSrcFile,
+			    TextStyle.GREEN.style());
+		}
+		log.appendLine("Backup finished!", TextStyle.BOLD.style());
+	    }
+	}
+    }
+
+    /**
+     * Searches recursively the directory where this class is situated to find
+     * any subtitle files. In case that any files are found they are stored in a
+     * list.
+     * 
+     * @param current
+     *                the directory where to search for subtitle files
+     * @throws IOException
+     */
+    void findFiles(File current) throws IOException {
+	try {
+	    if (current.isFile()) {
+		if (current.getName().endsWith(FILE_EXT_TYPE)) {
+		    pathList.add(current.getCanonicalPath());
+		    log.appendLine(current.getCanonicalPath(), 3);
+		}
+	    } else {
+		File[] siblings = current.listFiles();
+		for (int i = 0; i < siblings.length; i++) {
+		    findFiles(siblings[i]);
+		}
+	    }
+	} catch (Exception e) {
+	    throw new IOException(CANT_SEARCH_DIR_ERROR);
+	}
     }
 
     /**
@@ -144,13 +250,13 @@ public class FileModifier extends JFrame {
      *                the source file
      * @return the buffer where the content of the file is stored after reading
      * @throws IOException
-     * @throws FileNotFoundException
      */
     private StringBuilder readFile(String path) throws IOException {
 	BufferedReader br = null;
 	try {
 	    br = new BufferedReader(new FileReader(path));
 	} catch (FileNotFoundException e1) {
+	    // TODO handle this exception
 	    e1.printStackTrace();
 	}
 
@@ -183,7 +289,8 @@ public class FileModifier extends JFrame {
 	try {
 	    for (String path : pathList) {
 
-		log.appendLine("Scanning file: " + path, TextStyle.PLAIN.style());
+		log.appendLine("Scanning file: " + path, TextStyle.PLAIN
+			.style());
 
 		StringBuilder bufer = readFile(path);
 		String buferAsString = "";
@@ -230,33 +337,6 @@ public class FileModifier extends JFrame {
     }
 
     /**
-     * Searches recursively the directory where this class is situated to find
-     * any subtitle files. In case that any files are found they are stored in a
-     * list.
-     * 
-     * @param current
-     *                the directory where to search for subtitle files
-     * @throws IOException
-     */
-    void findFiles(File current) throws IOException {
-	try {
-	    if (current.isFile()) {
-		if (current.getName().endsWith(FILE_EXT_TYPE)) {
-		    pathList.add(current.getCanonicalPath());
-		    log.appendLine(current.getCanonicalPath(), 3);
-		}
-	    } else {
-		File[] siblings = current.listFiles();
-		for (int i = 0; i < siblings.length; i++) {
-		    findFiles(siblings[i]);
-		}
-	    }
-	} catch (Exception e) {
-	    throw new IOException(CANT_SEARCH_DIR_ERROR);
-	}
-    }
-
-    /**
      * Finds the directory where this class is situated in.
      * 
      * @return the path that denotes the current directory for this class
@@ -284,20 +364,5 @@ public class FileModifier extends JFrame {
      */
     public void displayMessage(String msg, String title, int type) {
 	JOptionPane.showMessageDialog(null, msg, title, type);
-    }
-
-    enum MessageType {
-
-	ERROR(0), INFO(1);
-
-	int type;
-
-	private MessageType(int type) {
-	    this.type = type;
-	}
-
-	public int get() {
-	    return type;
-	}
     }
 }
