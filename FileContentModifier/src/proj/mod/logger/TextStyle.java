@@ -12,7 +12,8 @@ public enum TextStyle {
     
     BOLD (1),
     RED  (2),
-    PLAIN (3);
+    PLAIN (3),
+    GREEN (4);
     
     private TextStyle(int type) {
 	this.type = type;
