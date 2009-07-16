@@ -162,7 +162,6 @@ public class FileModifier extends JFrame {
             log.appendLine(e.getMessage(), TextStyle.RED.style());
             displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR
                     .getValue());
-            e.printStackTrace();
         } catch (Exception e) {
             log.appendLine(e.getMessage(), TextStyle.RED.style());
             displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR
@@ -273,6 +272,7 @@ public class FileModifier extends JFrame {
             try {
                 br.close();
             } catch (IOException e) {
+                // TODO handle this exception
                 e.printStackTrace();
             }
         }
