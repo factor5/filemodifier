@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Main-Class: proj.subs.Start
+Main-Class: proj.mod.Start
 Class-Path: .
 
 
