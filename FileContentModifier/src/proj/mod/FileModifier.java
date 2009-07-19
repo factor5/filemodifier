@@ -48,7 +48,7 @@ public class FileModifier extends JFrame implements IMessages {
     /**
      * Path list.
      */
-    List<String> pathList = null;
+    private List<String> pathList = null;
 
     /**
      * Array containing the strings to be removed from the file.
@@ -98,13 +98,11 @@ public class FileModifier extends JFrame implements IMessages {
 	    this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 	    pathList = new ArrayList<String>();
-
 	    curDirectory = findCurrentDirectory();
 	    log.appendLine("Current directory:", TextStyle.BOLD.style());
 	    log.appendLine(curDirectory, TextStyle.PLAIN.style());
 
 	    File current = new File(curDirectory);
-
 	    log.appendLine(SEPARATOR + "Found files:", TextStyle.BOLD.style());
 	    findFiles(current);
 
@@ -114,43 +112,56 @@ public class FileModifier extends JFrame implements IMessages {
 		return;
 	    }
 
-	    int choise = JOptionPane.showConfirmDialog(null, "Make backup?",
-		    "Backup", JOptionPane.YES_NO_OPTION);
-	    try {
-		if (choise == Confiramtion.YES.getValue()) {
-		    backupFiles(curDirectory);
-		}
-	    } catch (IOException e) {
-		log.appendLine(e.getMessage(), TextStyle.RED.style());
-		choise = JOptionPane.showConfirmDialog(null, e.getMessage()
-			+ SEPARATOR + " Proceed without backup?", TITLE_ERROR,
-			JOptionPane.YES_NO_OPTION);
-		if (choise == Confiramtion.NO.getValue()) {
-		    throw new Exception(
-			    "Modification aborted due to unsuccesfull backup!");
-		} else {
-		    log.appendLine(SEPARATOR + "Backup was skipped!",
-			    TextStyle.RED.style());
-		}
-	    }
+	    makeBackup(pathList, curDirectory);
 
 	    log.appendLine(SEPARATOR + "Start parsing files:", TextStyle.BOLD
 		    .style());
 
-	    parseFiles();
+	    parseFiles(pathList);
 
 	    log.appendLine(SEPARATOR + "Job done!", TextStyle.BOLD.style());
-	    // displayMessage(READY_MESSAGE, TITLE_RESULT, MESS_TYPE_INFO);
 	} catch (IOException e) {
 	    log.appendLine(e.getMessage(), TextStyle.RED.style());
-	    displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR
-		    .getValue());
 	} catch (Exception e) {
 	    log.appendLine(e.getMessage(), TextStyle.RED.style());
-	    displayMessage(e.getMessage(), TITLE_ERROR, MessageType.ERROR
-		    .getValue());
 	} finally {
 	    this.setCursor(Cursor.getDefaultCursor());
+	}
+    }
+
+    /**
+     * Organizes a dialog with the user if a backup to be done and invokes a
+     * method that saves a copies the files that are marked for modification.
+     * 
+     * @param pathList
+     *                the files that are to be saved
+     * @param curDirectory
+     *                the current directory
+     * @throws Exception
+     */
+    private void makeBackup(final List<String> pathList,
+	    final String curDirectory) throws Exception {
+	if (curDirectory == null || curDirectory.isEmpty()) {
+	    throw new IOException(MISSING_OR_EMPTY_PATH);
+	}
+
+	int choise = JOptionPane.showConfirmDialog(null, "Make backup?",
+		"Backup", JOptionPane.YES_NO_OPTION);
+	try {
+	    if (choise == Confiramtion.YES.getValue()) {
+		writeBackupFiles(curDirectory, pathList);
+	    }
+	} catch (IOException e) {
+	    log.appendLine(e.getMessage(), TextStyle.RED.style());
+	    choise = JOptionPane.showConfirmDialog(null, e.getMessage()
+		    + SEPARATOR + " Proceed without backup?", TITLE_ERROR,
+		    JOptionPane.YES_NO_OPTION);
+	    if (choise == Confiramtion.NO.getValue()) {
+		throw new Exception(BACKUP_ABORTED);
+	    } else {
+		log.appendLine(SEPARATOR + "Backup was skipped!", TextStyle.RED
+			.style());
+	    }
 	}
     }
 
@@ -161,15 +172,15 @@ public class FileModifier extends JFrame implements IMessages {
      * 
      * @param path
      *                the path where to store the backup
+     * @param pathList
+     *                a list containing the found files that are gone be
+     *                modified
      * @throws IOException
      *                 if provided path is null or empty
+     * 
      */
-    private void backupFiles(final String path) throws IOException {
-	if (path == null || path.isEmpty()) {
-	    throw new IOException(
-		    "Backup failure because of missing or empty path!");
-	}
-
+    private void writeBackupFiles(final String path, final List<String> pathList)
+	    throws IOException {
 	if (new File(path).canWrite()) {
 	    String backupDirPath = "backup_" + (System.currentTimeMillis());
 
@@ -194,6 +205,8 @@ public class FileModifier extends JFrame implements IMessages {
 		}
 		log.appendLine("Backup finished!", TextStyle.BOLD.style());
 	    }
+	} else {
+	    throw new IOException(CANT_WRITE_ERROR);
 	}
     }
 
@@ -206,7 +219,7 @@ public class FileModifier extends JFrame implements IMessages {
      *                the directory where to search for subtitle files
      * @throws IOException
      */
-    void findFiles(File current) throws IOException {
+    private void findFiles(File current) throws IOException {
 	try {
 	    if (current.isFile()) {
 		if (current.getName().endsWith(FILE_EXT_TYPE)) {
@@ -267,7 +280,7 @@ public class FileModifier extends JFrame implements IMessages {
      * 
      * @throws IOException
      */
-    private void parseFiles() throws IOException {
+    private void parseFiles(final List<String> pathList) throws IOException {
 	try {
 	    for (String path : pathList) {
 
@@ -379,7 +392,8 @@ public class FileModifier extends JFrame implements IMessages {
      *                the strings to set
      * @throws IllegalArgumentException
      */
-    public void setStrings(final String[][] strings) throws IllegalArgumentException {
+    public void setStrings(final String[][] strings)
+	    throws IllegalArgumentException {
 	if (strings == null || strings.length == 0) {
 	    throw new IllegalArgumentException(ILLEGAL_ARRAY_ARG_ERROR);
 	}
