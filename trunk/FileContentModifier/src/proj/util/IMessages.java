@@ -39,6 +39,8 @@ public interface IMessages {
     public static final String READY_MESSAGE = "End of scanning!";
     public static final String TITLE_ERROR = "Error";
     public static final String TITLE_RESULT = "Result";
+    public static final String CANT_WRITE_ERROR = "Can't write to this path! Backup failed!";
+    public static final String MISSING_OR_EMPTY_PATH = "Backup failure because of missing or empty path!";
     public static final String ILLEGAL_STRING_ARG_ERROR = "Argument must not be null or empty string!";
     public static final String ILLEGAL_ARRAY_ARG_ERROR = "Argument must not be null or empty array!";
 
