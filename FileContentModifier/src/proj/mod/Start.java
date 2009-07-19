@@ -5,6 +5,8 @@ package proj.mod;
 
 import java.util.MissingResourceException;
 
+import javax.swing.JOptionPane;
+
 import proj.mod.logger.WindowLogger;
 import proj.util.Util;
 
@@ -33,16 +35,19 @@ public class Start {
 		    new WindowLogger());
 	    fmod.modify();
 	} catch (MissingResourceException e) {
-	    fmod
-		    .displayMessage(
+	    JOptionPane
+		    .showMessageDialog(
+			    null,
 			    "Application can't be started because of missing config.properties file or wrong format!",
-			    "Error", Byte.valueOf("1"));
+			    "Error", 0);
+
 	    e.printStackTrace();
 	} catch (Exception e) {
-	    fmod
-		    .displayMessage(
+	    JOptionPane
+		    .showMessageDialog(
+			    null,
 			    "There are no strings found for replacement in config file!",
-			    "Error", Byte.valueOf("1"));
+			    "Error", 0);
 	    e.printStackTrace();
 	}
     }
