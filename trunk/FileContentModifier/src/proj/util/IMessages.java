@@ -43,5 +43,6 @@ public interface IMessages {
     public static final String MISSING_OR_EMPTY_PATH = "Backup failure because of missing or empty path!";
     public static final String ILLEGAL_STRING_ARG_ERROR = "Argument must not be null or empty string!";
     public static final String ILLEGAL_ARRAY_ARG_ERROR = "Argument must not be null or empty array!";
+    public static final String BACKUP_ABORTED = "Modification aborted due to unsuccesfull backup!";
 
 }
