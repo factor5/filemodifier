@@ -24,12 +24,9 @@ public class Start {
 	Util util = Util.getInstance();
 	try {
 	    strings = util.loadProperties();
-
-	    if (strings == null) {
+	    // there is no properties read from the configuration file
+	    if (strings.length == 0) {
 		throw new Exception();
-	    }
-	    for (int i = 0; i < strings.length; i++) {
-		System.out.println(strings[i][0] + " | " + strings[i][1]);
 	    }
 
 	    fmod = new FileModifier(util.getFileExtensionType(), strings,
