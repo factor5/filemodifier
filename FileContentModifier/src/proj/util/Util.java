@@ -14,7 +14,7 @@ import java.util.Set;
  * 
  * 19.04.2009
  */
-public class Util {
+public class Util implements IMessages {
 
     private static final String CONFIG_FILE_NAME = "config";
     private static final String FILE_EXTESION_TYPE = "fileExt";
@@ -56,7 +56,7 @@ public class Util {
      * be replaced. Those strings are found by its prefix also taken from
      * configuration.
      * 
-     * @return an array of strings
+     * @return an array of strings or empty array
      * @throws MissingResourceException
      */
     public String[][] loadProperties() throws MissingResourceException {
@@ -71,10 +71,12 @@ public class Util {
 		strings.add(bundle.getString(key));
 	    }
 	}
+	String[][] result = {};
 	if (strings.size() != 0) {
-	    return separate(strings.toArray(new String[strings.size()]));
+	    result = parsePropertyValues(strings.toArray(new String[strings
+		    .size()]));
 	}
-	return null;
+	return result;
     }
 
     /**
@@ -87,16 +89,28 @@ public class Util {
     }
 
     /**
-     * 
+     * Iterates the values of the provided array and for every value finds out 2
+     * parts - a string to be found and a replacement for that string (They
+     * should be separated by '|' sign). These 2 parts are stored in a two
+     * dimensional array.
      * 
      * @param strings
-     * @return
+     *                an array containing properties values read from the
+     *                properties file
+     * @return an two dimensional array containing target and replacement
+     *         strings
      */
-    private String[][] separate(final String[] strings) {
+    private String[][] parsePropertyValues(final String[] strings) {
 	final String[][] separatedStrings = new String[strings.length][strings.length];
-	final String EMPTY_STRING = "";
 	for (int i = 0; i < strings.length; i++) {
-	    String[] temp = strings[i].split("\\|");
+	    String[] temp = strings[i].split(PROPERTY_SEPARATOR);
+	    // there is property set but no value for it
+	    // or improper value for property (more than two parts separated by
+	    // '|' sign)
+	    if (temp.length == 0 || temp.length > 2) {
+		continue;
+	    }
+
 	    separatedStrings[i][0] = temp[0];
 	    if (temp.length == 1) {
 		separatedStrings[i][1] = EMPTY_STRING;
