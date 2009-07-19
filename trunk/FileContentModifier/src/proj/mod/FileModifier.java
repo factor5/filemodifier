@@ -39,7 +39,11 @@ public class FileModifier extends JFrame implements IMessages {
 
     private static final long serialVersionUID = -9056510793502618924L;
 
-    public static String FILE_EXT_TYPE;
+    /**
+     * Extension type for the files that are being modified. This is taken from
+     * configuration file.
+     */
+    private String FILE_EXT_TYPE = "";
 
     /**
      * Path list.
@@ -228,7 +232,7 @@ public class FileModifier extends JFrame implements IMessages {
      * @return the buffer where the content of the file is stored after reading
      * @throws IOException
      */
-    private StringBuilder readFile(String path) throws IOException {
+    private StringBuilder readFile(final String path) throws IOException {
 	BufferedReader br = null;
 	try {
 	    br = new BufferedReader(new FileReader(path));
@@ -298,7 +302,7 @@ public class FileModifier extends JFrame implements IMessages {
      *                the path to the destination file
      * @throws IOException
      */
-    private void writeFile(String buferAsString, String path)
+    private void writeFile(final String buferAsString, final String path)
 	    throws IOException {
 	BufferedWriter bw = new BufferedWriter(new FileWriter(path));
 
@@ -320,7 +324,7 @@ public class FileModifier extends JFrame implements IMessages {
      * @return the path that denotes the current directory for this class
      * @throws IOException
      */
-    public String findCurrentDirectory() throws IOException {
+    private String findCurrentDirectory() throws IOException {
 	File file = new File(".");
 	try {
 	    String currentDirectory = file.getCanonicalPath();
@@ -342,5 +346,43 @@ public class FileModifier extends JFrame implements IMessages {
      */
     public void displayMessage(String msg, String title, int type) {
 	JOptionPane.showMessageDialog(null, msg, title, type);
+    }
+
+    /**
+     * Getter for FILE_EXT_TYPE.
+     * 
+     * @return the FILE_EXT_TYPE
+     */
+    public String getFILE_EXT_TYPE() {
+	return FILE_EXT_TYPE;
+    }
+
+    /**
+     * Setter for FILE_EXT_TYPE.
+     * 
+     * @param file_ext_type
+     *                the fILE_EXT_TYPE to set
+     * @throws IllegalArgumentException
+     */
+    public void setFILE_EXT_TYPE(final String file_ext_type)
+	    throws IllegalArgumentException {
+	if (file_ext_type == null || file_ext_type.isEmpty()) {
+	    throw new IllegalArgumentException(ILLEGAL_STRING_ARG_ERROR);
+	}
+	FILE_EXT_TYPE = file_ext_type;
+    }
+
+    /**
+     * Setter for strings array.
+     * 
+     * @param strings
+     *                the strings to set
+     * @throws IllegalArgumentException
+     */
+    public void setStrings(final String[][] strings) throws IllegalArgumentException {
+	if (strings == null || strings.length == 0) {
+	    throw new IllegalArgumentException(ILLEGAL_ARRAY_ARG_ERROR);
+	}
+	this.strings = strings;
     }
 }
