@@ -21,6 +21,8 @@ public interface IMessages {
     public static final String PATH_SEPARATOR = System
 	    .getProperty("file.separator");
     
+    public static final String PROPERTY_SEPARATOR = "\\|";
+    
     /**
      * Line separator.
      */
@@ -37,6 +39,7 @@ public interface IMessages {
     public static final String READY_MESSAGE = "End of scanning!";
     public static final String TITLE_ERROR = "Error";
     public static final String TITLE_RESULT = "Result";
-    
+    public static final String ILLEGAL_STRING_ARG_ERROR = "Argument must not be null or empty string!";
+    public static final String ILLEGAL_ARRAY_ARG_ERROR = "Argument must not be null or empty array!";
 
 }
