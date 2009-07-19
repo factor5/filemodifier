@@ -61,6 +61,11 @@ public class FileModifier extends JFrame implements IMessages {
     private ILogger log;
 
     /**
+     * Counter for the found files.
+     */
+    private int countFoundFiles = 1;
+
+    /**
      * Initializing constructor.
      * 
      * @param fileExt
@@ -104,7 +109,7 @@ public class FileModifier extends JFrame implements IMessages {
 
 	    File current = new File(curDirectory);
 	    log.appendLine(SEPARATOR + "Found files:", TextStyle.BOLD.style());
-	    findFiles(current);
+	    searchFiles(current);
 
 	    if (pathList.size() == 0) {
 		displayMessage(NO_FILES_FOUND_INFO, TITLE_RESULT,
@@ -190,6 +195,7 @@ public class FileModifier extends JFrame implements IMessages {
 
 		Copier copier = new FileCopyNIO();
 		StringBuilder srcFileNewName = new StringBuilder();
+		int counter = 1;
 		for (String pathToSrcFile : pathList) {
 
 		    srcFileNewName.append(backupDirPath);
@@ -200,8 +206,9 @@ public class FileModifier extends JFrame implements IMessages {
 			    srcFileNewName.toString()));
 		    srcFileNewName.setLength(0);
 
-		    log.appendLine("Backup of :" + pathToSrcFile,
+		    log.appendLine(counter + ". " + pathToSrcFile,
 			    TextStyle.GREEN.style());
+		    counter++;
 		}
 		log.appendLine("Backup finished!", TextStyle.BOLD.style());
 	    }
@@ -219,17 +226,19 @@ public class FileModifier extends JFrame implements IMessages {
      *                the directory where to search for subtitle files
      * @throws IOException
      */
-    private void findFiles(File current) throws IOException {
+    private void searchFiles(File current) throws IOException {
 	try {
 	    if (current.isFile()) {
 		if (current.getName().endsWith(FILE_EXT_TYPE)) {
 		    pathList.add(current.getCanonicalPath());
-		    log.appendLine(current.getCanonicalPath(), 3);
+		    log.appendLine(countFoundFiles + ". "
+			    + current.getCanonicalPath(), 3);
+		    countFoundFiles++;
 		}
 	    } else {
 		File[] siblings = current.listFiles();
 		for (int i = 0; i < siblings.length; i++) {
-		    findFiles(siblings[i]);
+		    searchFiles(siblings[i]);
 		}
 	    }
 	} catch (Exception e) {
@@ -282,11 +291,13 @@ public class FileModifier extends JFrame implements IMessages {
      */
     private void parseFiles(final List<String> pathList) throws IOException {
 	try {
+	    int counter = 1;
 	    for (String path : pathList) {
 
-		log.appendLine("Scanning file: " + path, TextStyle.PLAIN
-			.style());
-
+		log.appendLine("Scanning file: " + counter + ". " + path,
+			TextStyle.PLAIN.style());
+		counter++;
+		
 		StringBuilder bufer = readFile(path);
 		String buferAsString = "";
 		if (bufer.length() > 0) {
