@@ -80,8 +80,13 @@ public class Util implements IMessages {
     }
 
     /**
+     * Gets a resource bundle with provided name.
      * 
-     * @return
+     * @param bundleName
+     *                the name for the bundle to be loaded.
+     * @return the resource bundle
+     * @throws MissingResourceException
+     *                 if the bundle can't be found
      */
     private ResourceBundle getBundle(final String bundleName)
 	    throws MissingResourceException {
