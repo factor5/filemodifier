@@ -27,6 +27,11 @@ import javax.swing.text.StyledDocument;
 public class WindowLogger extends JFrame implements ILogger {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1135615812977645829L;
+
+    /**
      * Line separator according to system.
      */
     private static final String LINE_BREAK = System
@@ -103,8 +108,6 @@ public class WindowLogger extends JFrame implements ILogger {
             doc.insertString(doc.getLength(), text, attr);
             logPanel.repaint();
             logPanel.setCaretPosition(logPanel.getDocument().getLength());
-            // logPanel.scrollRectToVisible(new Rectangle(0,
-            // logPanel.getHeight() + 2, 1, 1));
         } catch (BadLocationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

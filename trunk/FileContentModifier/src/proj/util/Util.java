@@ -34,8 +34,6 @@ public class Util implements IMessages {
      * Private constructor.
      */
     private Util() {
-        // bundle = getBundle(CONFIG_FILE_NAME);
-        // fileExtensionType = bundle.getString("fileExt");
     }
 
     /**
