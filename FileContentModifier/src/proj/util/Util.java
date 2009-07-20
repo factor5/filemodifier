@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * @author Svilen Velikov
  * 
- * 19.04.2009
+ *         19.04.2009
  */
 public class Util implements IMessages {
 
@@ -34,8 +34,8 @@ public class Util implements IMessages {
      * Private constructor.
      */
     private Util() {
-	// bundle = getBundle(CONFIG_FILE_NAME);
-	// fileExtensionType = bundle.getString("fileExt");
+        // bundle = getBundle(CONFIG_FILE_NAME);
+        // fileExtensionType = bundle.getString("fileExt");
     }
 
     /**
@@ -44,10 +44,10 @@ public class Util implements IMessages {
      * @return
      */
     public static Util getInstance() {
-	if (utilInstance == null) {
-	    utilInstance = new Util();
-	}
-	return utilInstance;
+        if (utilInstance == null) {
+            utilInstance = new Util();
+        }
+        return utilInstance;
     }
 
     /**
@@ -60,37 +60,37 @@ public class Util implements IMessages {
      * @throws MissingResourceException
      */
     public String[][] loadProperties() throws MissingResourceException {
-	final ResourceBundle bundle = getBundle(CONFIG_FILE_NAME);
-	this.fileExtensionType = bundle.getString(FILE_EXTESION_TYPE);
-	final String prefix = bundle.getString(Util.PREFIX);
+        final ResourceBundle bundle = getBundle(CONFIG_FILE_NAME);
+        this.fileExtensionType = bundle.getString(FILE_EXTESION_TYPE);
+        final String prefix = bundle.getString(Util.PREFIX);
 
-	List<String> strings = new LinkedList<String>();
-	Set<String> keys = bundle.keySet();
-	for (String key : keys) {
-	    if (key.startsWith(prefix)) {
-		strings.add(bundle.getString(key));
-	    }
-	}
-	String[][] result = {};
-	if (strings.size() != 0) {
-	    result = parsePropertyValues(strings.toArray(new String[strings
-		    .size()]));
-	}
-	return result;
+        List<String> strings = new LinkedList<String>();
+        Set<String> keys = bundle.keySet();
+        for (String key : keys) {
+            if (key.startsWith(prefix)) {
+                strings.add(bundle.getString(key));
+            }
+        }
+        String[][] result = {};
+        if (strings.size() != 0) {
+            result = parsePropertyValues(strings.toArray(new String[strings
+                    .size()]));
+        }
+        return result;
     }
 
     /**
      * Gets a resource bundle with provided name.
      * 
      * @param bundleName
-     *                the name for the bundle to be loaded.
+     *            the name for the bundle to be loaded.
      * @return the resource bundle
      * @throws MissingResourceException
-     *                 if the bundle can't be found
+     *             if the bundle can't be found
      */
     private ResourceBundle getBundle(final String bundleName)
-	    throws MissingResourceException {
-	return ResourceBundle.getBundle(bundleName);
+            throws MissingResourceException {
+        return ResourceBundle.getBundle(bundleName);
     }
 
     /**
@@ -100,31 +100,31 @@ public class Util implements IMessages {
      * dimensional array.
      * 
      * @param strings
-     *                an array containing properties values read from the
-     *                properties file
+     *            an array containing properties values read from the properties
+     *            file
      * @return an two dimensional array containing target and replacement
      *         strings
      */
     private String[][] parsePropertyValues(final String[] strings) {
-	final String[][] separatedStrings = new String[strings.length][strings.length];
-	for (int i = 0; i < strings.length; i++) {
-	    String[] temp = strings[i].split(PROPERTY_SEPARATOR);
-	    // there is property set but no value for it
-	    // or improper value for property (more than two parts separated by
-	    // '|' sign)
-	    if (temp.length == 0 || temp.length > 2) {
-		continue;
-	    }
+        final String[][] separatedStrings = new String[strings.length][2];
+        for (int i = 0; i < strings.length; i++) {
+            String[] temp = strings[i].split(PROPERTY_SEPARATOR);
+            // there is property set but no value for it
+            // or improper value for property (more than two parts separated by
+            // '|' sign)
+            if (temp.length == 0 || temp.length > 2) {
+                continue;
+            }
 
-	    separatedStrings[i][0] = temp[0];
-	    if (temp.length == 1) {
-		separatedStrings[i][1] = EMPTY_STRING;
-	    } else {
-		separatedStrings[i][1] = temp[1];
-	    }
-	}
+            separatedStrings[i][0] = temp[0];
+            if (temp.length == 1) {
+                separatedStrings[i][1] = EMPTY_STRING;
+            } else {
+                separatedStrings[i][1] = temp[1];
+            }
+        }
 
-	return separatedStrings;
+        return separatedStrings;
     }
 
     /**
@@ -133,6 +133,6 @@ public class Util implements IMessages {
      * @return the fileExtensionType
      */
     public String getFileExtensionType() {
-	return fileExtensionType;
+        return fileExtensionType;
     }
 }
