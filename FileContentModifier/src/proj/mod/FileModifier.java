@@ -309,7 +309,7 @@ public class FileModifier implements IMessages {
                 if (arrLen > 0) {
                     for (int i = 0; i < arrLen; i++) {
                         for (int j = 0; j < strings.length; j++) {
-                            buffAsArray[j] = buffAsArray[j].replace(
+                            buffAsArray[i] = buffAsArray[i].replace(
                                     strings[j][0], strings[j][1]);
                         }
                     }
