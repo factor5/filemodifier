@@ -1,0 +1,32 @@
+<project name="FileModifier" default="deploy" basedir="..">
+	<target name="init">
+		<property name="dest.dir.dist" value="dist" />
+		<property name="dest.dir.bin" value="bin" />
+		<property name="src.dir.libs" value="libs" />
+		<property name="src.dir.src" value="src" />
+	</target>
+	
+	<target name="clean" depends="init">
+		<delete dir="${dest.dir.dist}" />
+		<delete dir="${dest.dir.bin}" />
+	</target>
+	
+	<target name="prepare" depends="clean">
+		<mkdir dir="${dest.dir.dist}" />
+		<mkdir dir="${dest.dir.bin}" />
+	</target>
+	
+	<path id="project.class.path">
+		<pathelement path="${java.class.path}/" />
+	</path>
+	
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.dir.src}" destdir="${dest.dir.bin}">
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+	
+	<target name="deploy" depends="compile">
+		<jar destfile="${dest.dir.dist}/FMod.jar" basedir="${dest.dir.bin}" manifest="docs/MANIFEST.MF" />
+	</target>
+</project>
