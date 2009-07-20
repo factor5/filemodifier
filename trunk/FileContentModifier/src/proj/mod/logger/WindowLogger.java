@@ -23,7 +23,7 @@ import javax.swing.text.StyledDocument;
  * 
  * @author Svilen Velikov
  * 
- * 18.04.2009
+ *         18.04.2009
  */
 public class WindowLogger extends JFrame implements ILogger {
 
@@ -31,7 +31,7 @@ public class WindowLogger extends JFrame implements ILogger {
      * Line separator according to system.
      */
     private static final String LINE_BREAK = System
-	    .getProperty("line.separator");
+            .getProperty("line.separator");
 
     /**
      * Panel where this log outputs text.
@@ -47,19 +47,19 @@ public class WindowLogger extends JFrame implements ILogger {
      * Constructor.
      */
     public WindowLogger() {
-	this.setName("Log Panel");
-	this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setTitle("FileModifier");
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-	logPanel = new JTextPane();
-	logPanel.setEditable(false);
-	doc = logPanel.getStyledDocument();
+        logPanel = new JTextPane();
+        logPanel.setEditable(false);
+        doc = logPanel.getStyledDocument();
 
-	JScrollPane scroll = new JScrollPane(logPanel);
-	scroll.setPreferredSize(new Dimension(600, 300));
-	this.getContentPane().add(scroll);
-	this.setLocation(300, 200);
-	this.pack();
-	this.setVisible(true);
+        JScrollPane scroll = new JScrollPane(logPanel);
+        scroll.setPreferredSize(new Dimension(600, 300));
+        this.getContentPane().add(scroll);
+        this.setLocation(300, 200);
+        this.pack();
+        this.setVisible(true);
     }
 
     /**
@@ -67,13 +67,13 @@ public class WindowLogger extends JFrame implements ILogger {
      * parameter is set to true.
      * 
      * @param text
-     *                the text to be appended to the log.
+     *            the text to be appended to the log.
      * @param bold
-     *                shows if the text should have bold style
+     *            shows if the text should have bold style
      */
     @Override
     public void appendText(final String text, final int styleType) {
-	printText(text, getStyle(styleType));
+        printText(text, getStyle(styleType));
     }
 
     /**
@@ -81,13 +81,13 @@ public class WindowLogger extends JFrame implements ILogger {
      * then it is applied.
      * 
      * @param text
-     *                the text to be appended to the log
+     *            the text to be appended to the log
      * @param bold
-     *                shows if the provided text should be printed in bold
+     *            shows if the provided text should be printed in bold
      */
     @Override
     public void appendLine(final String text, final int styleType) {
-	printText(text + LINE_BREAK, getStyle(styleType));
+        printText(text + LINE_BREAK, getStyle(styleType));
     }
 
     /**
@@ -95,19 +95,19 @@ public class WindowLogger extends JFrame implements ILogger {
      * and applies a style that is provided.
      * 
      * @param text
-     *                the text to be printed into the text panel
+     *            the text to be printed into the text panel
      * @param attr
-     *                the style to be applied to the text
+     *            the style to be applied to the text
      */
     private void printText(final String text, final AttributeSet attr) {
-	try {
-	    doc.insertString(doc.getLength(), text, attr);
-	    logPanel.scrollRectToVisible(new Rectangle(0,
-		    logPanel.getHeight() + 2, 1, 1));
-	} catch (BadLocationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+        try {
+            doc.insertString(doc.getLength(), text, attr);
+            logPanel.scrollRectToVisible(new Rectangle(0,
+                    logPanel.getHeight() + 2, 1, 1));
+        } catch (BadLocationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -116,28 +116,28 @@ public class WindowLogger extends JFrame implements ILogger {
      * @return
      */
     private Style getStyle(final int styleType) {
-	Style s = null;
-	switch (styleType) {
-	case 1:
-	    s = doc.addStyle("bold", null);
-	    StyleConstants.setBold(s, true);
-	    break;
-	case 2:
-	    s = doc.addStyle("red", null);
-	    StyleConstants.setForeground(s, Color.RED);
-	    break;
-	case 3:
-	    s = doc.addStyle("plain", null);
-	    StyleConstants.setBold(s, false);
-	    break;
-	case 4:
-	    s = doc.addStyle("green", null);
-	    StyleConstants.setForeground(s, Color.GREEN);
-	    break;
-	default:
-	    break;
-	}
-	return s;
+        Style s = null;
+        switch (styleType) {
+        case 1:
+            s = doc.addStyle("bold", null);
+            StyleConstants.setBold(s, true);
+            break;
+        case 2:
+            s = doc.addStyle("red", null);
+            StyleConstants.setForeground(s, Color.RED);
+            break;
+        case 3:
+            s = doc.addStyle("plain", null);
+            StyleConstants.setBold(s, false);
+            break;
+        case 4:
+            s = doc.addStyle("green", null);
+            StyleConstants.setForeground(s, Color.GREEN);
+            break;
+        default:
+            break;
+        }
+        return s;
     }
 
 }
