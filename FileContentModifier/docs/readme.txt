@@ -1,9 +1,9 @@
 FileContentModifier v1.1
 ----------
 
-FileContentModifier is an Java application for manipulating content of text files. 
-Because it is written on Java it is supposed to be working under most OS. For now it is
-tested only under WindowsXP.
+FileContentModifier is an Java application for manipulating content of any kind of text 
+files. Because it is written on Java it is supposed to be working under most OS. For now
+it is tested only under WindowsXP.
 
 FileContentModifier Copyright (C) 2008-2009 Svilen Velikov.
 
