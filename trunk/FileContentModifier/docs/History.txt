@@ -9,6 +9,7 @@ HISTORY of the FileContentModifier
     + Option not only to remove strings but to replace too.
     + Work log will be displayed in a window pop up real-time.
     - Localization through external files. [POSTPONED]
+    + Bug fixing.
 
   1.1.1		2009-18-04  
   -------------------------
