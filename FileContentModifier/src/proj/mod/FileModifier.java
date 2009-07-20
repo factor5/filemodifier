@@ -107,10 +107,8 @@ public class FileModifier implements IMessages {
             searchFiles(current);
 
             if (pathList.size() == 0) {
-                displayMessage(NO_FILES_FOUND_INFO, TITLE_RESULT,
-                        MessageType.INFO.getValue());
+        	log.appendLine(NO_FILES_FOUND_INFO, TextStyle.RED.style());
                 return;
-                // System.exit(EXIT_ON_CLOSE);
             }
 
             makeBackup(pathList, curDirectory);
