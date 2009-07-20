@@ -182,12 +182,18 @@ public class FileModifier implements IMessages {
      */
     private void writeBackupFiles(final String path, final List<String> pathList)
             throws IOException {
-        if (new File(path).canWrite()) {
-            String backupDirPath = "backup_" + (System.currentTimeMillis());
+        String rootPath = System.getProperty("user.home") + "\\";
+        if (new File(rootPath).canWrite()) {
+            String backupDirPath = rootPath + "FMod_backup_"
+                    + (System.currentTimeMillis());
 
             if (new File(backupDirPath).mkdir()) {
-                log.appendLine(SEPARATOR + "Start backup operation:",
+                log.appendLine(
+                        SEPARATOR + "Root directory for the backup is: ",
                         TextStyle.BOLD.style());
+                log.appendLine(rootPath, TextStyle.RED.style());
+                log.appendLine("Start backup operation:", TextStyle.BOLD
+                        .style());
 
                 Copier copier = new FileCopy();
                 StringBuilder srcFileNewName = new StringBuilder();
