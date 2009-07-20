@@ -5,7 +5,6 @@ package proj.mod.logger;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -102,8 +101,10 @@ public class WindowLogger extends JFrame implements ILogger {
     private void printText(final String text, final AttributeSet attr) {
         try {
             doc.insertString(doc.getLength(), text, attr);
-            logPanel.scrollRectToVisible(new Rectangle(0,
-                    logPanel.getHeight() + 2, 1, 1));
+            logPanel.repaint();
+            logPanel.setCaretPosition(logPanel.getDocument().getLength());
+            // logPanel.scrollRectToVisible(new Rectangle(0,
+            // logPanel.getHeight() + 2, 1, 1));
         } catch (BadLocationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
