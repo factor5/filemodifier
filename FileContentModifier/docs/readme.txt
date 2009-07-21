@@ -10,7 +10,9 @@ FileContentModifier Copyright (C) 2008-2009 Svilen Velikov.
 
 The main features of FileContentModifier: 
 
-  - Configuration through config file.
+  - Configuration through configuration file.
+  - Possible backup for the files before the changes to be done.
+  - Windowed console where all the activities of the application is tracked down.
 
 
 Use and configuration instructions:
@@ -27,9 +29,10 @@ Use and configuration instructions:
 	_str=<i>	: example string key '_str' and value '<i>' that application
 			  	  will find and remove.
 	_str=<i>|<b>: this tells the application to replace all '<i>' strings with '<b>'. 
+	
   - FileContentModifier recursively scans the directory where it is situated and finds all
-    text files with provided extension. Reading all found files it removes the required
-    strings.
+    text files with provided extension. If the user decides to make backup it has the option
+    to do that. Next reading all found files it removes or replaces the required strings.
 
 
 FileContentModifier is free software distributed under the GNU LGPL.
