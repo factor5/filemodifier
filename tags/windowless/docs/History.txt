@@ -1,0 +1,31 @@
+HISTORY of the FileContentModifier
+--------------------
+
+  NEXT release	2009  
+  -------------------------
+  	+ Add backup option. 
+    + Searching the configuration file in the same directory. 
+      No need to have same name as required.
+    + Option not only to remove strings but to replace too.
+    + Work log will be displayed in a window pop up real-time.
+    - Localization through external files. [POSTPONED]
+    + Bug fixing.
+
+  1.1.1		2009-18-04  
+  -------------------------
+    - Added window logger that prints out the activity of the application
+      to a window.
+      
+
+  1.1		2009-04-04  
+  -------------------------
+    - Added option for configuration through config.properties file.
+
+
+  1.0 		2008-11-10
+  -------------------------
+    - First release. Only reads *.srt files. Needed strings that
+      should be replaced was hard-coded inside the application.
+
+
+End of document
